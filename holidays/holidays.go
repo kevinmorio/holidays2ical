@@ -3,97 +3,103 @@ package holidays
 import (
 	"sort"
 	"time"
+
+	"golang.org/x/text/language"
 )
 
-type Holiday struct {
-	Name        map[string]string
-	Date        time.Time
-	Description map[string]string
-}
+type (
+	TranslatedString map[language.Tag]string
+
+	Holiday struct {
+		Name        TranslatedString
+		Date        time.Time
+		Description TranslatedString
+	}
+)
 
 func NewYear(year int) Holiday {
 	return Holiday{
-		Name: map[string]string{
-			"de-DE": "Neujahrstag",
-			"en-US": "New Year",
+		Name: TranslatedString{
+			language.German:  "Neujahrstag",
+			language.English: "New Year",
 		},
 		Date: time.Date(year, 1, 1, 0, 0, 0, 0, time.UTC),
-		Description: map[string]string{
-			"de-DE": "Gesetzlicher Feiertag",
+		Description: TranslatedString{
+			language.German: "Gesetzlicher Feiertag",
 		},
 	}
 }
 
 func Epiphany(year int) Holiday {
 	return Holiday{
-		Name: map[string]string{
-			"de-DE": "Heilige Drei Könige",
+		Name: TranslatedString{
+			language.German: "Heilige Drei Könige",
 		},
 		Date: time.Date(year, 1, 6, 0, 0, 0, 0, time.UTC),
-		Description: map[string]string{
-			"de-DE": "Feiertag in Baden-Württemberg, Bayern, Sachsen-Anhalt0",
+		Description: TranslatedString{
+			language.German: "Feiertag in Baden-Württemberg, Bayern, Sachsen-Anhalt0",
 		},
 	}
 }
 
 func ValentinesDay(year int) Holiday {
 	return Holiday{
-		Name: map[string]string{
-			"de-DE": "Valentinstag",
+		Name: TranslatedString{
+			language.German: "Valentinstag",
 		},
 		Date: time.Date(year, 2, 14, 0, 0, 0, 0, time.UTC),
-		Description: map[string]string{
-			"de-DE": "Gedenktag",
+		Description: TranslatedString{
+			language.German: "Gedenktag",
 		},
 	}
 }
 
 func Rosenmontag(year int) Holiday {
 	return Holiday{
-		Name: map[string]string{
-			"de-DE": "Rosenmontag",
+		Name: TranslatedString{
+			language.German: "Rosenmontag",
 		},
 		Date: easterDate(year).AddDate(0, 0, -48),
-		Description: map[string]string{
-			"de-DE": "Gedenktag",
+		Description: TranslatedString{
+			language.German: "Gedenktag",
 		},
 	}
 }
 
 func ShrowveTuesday(year int) Holiday {
 	return Holiday{
-		Name: map[string]string{
-			"de-DE": "Faschingsdienstag",
-			"en-US": "Shrove Tuesday",
+		Name: TranslatedString{
+			language.German:  "Faschingsdienstag",
+			language.English: "Shrove Tuesday",
 		},
 		Date: easterDate(year).AddDate(0, 0, -47),
-		Description: map[string]string{
-			"de-DE": "Gedenktag",
+		Description: TranslatedString{
+			language.German: "Gedenktag",
 		},
 	}
 }
 
 func AshWednesday(year int) Holiday {
 	return Holiday{
-		Name: map[string]string{
-			"de-DE": "Aschermittwoch",
-			"en-US": "Ash Wednesday",
+		Name: TranslatedString{
+			language.German:  "Aschermittwoch",
+			language.English: "Ash Wednesday",
 		},
 		Date: easterDate(year).AddDate(0, 0, -46),
-		Description: map[string]string{
-			"de-DE": "Gedenktag",
+		Description: TranslatedString{
+			language.German: "Gedenktag",
 		},
 	}
 }
 
 func WomensDay(year int) Holiday {
 	return Holiday{
-		Name: map[string]string{
-			"de-DE": "Internationaler Frauentag",
+		Name: TranslatedString{
+			language.German: "Internationaler Frauentag",
 		},
 		Date: time.Date(year, 3, 8, 0, 0, 0, 0, time.UTC),
-		Description: map[string]string{
-			"de-DE": "Gedenktag in Baden-Württemberg, Bayern, Berlin, Brandenburg, Bremen, Hamburg, Hessen, Mecklenburg-Vorpommern, Mecklenburg-Vorpommern, Niedersachsen, Nordrhein-Westfalen, Rheinland-Pfalz, Saarland, Sachsen, Sachsen-Anhalt, Schleswig-Holstein, Thüringen",
+		Description: TranslatedString{
+			language.German: "Gedenktag in Baden-Württemberg, Bayern, Berlin, Brandenburg, Bremen, Hamburg, Hessen, Mecklenburg-Vorpommern, Mecklenburg-Vorpommern, Niedersachsen, Nordrhein-Westfalen, Rheinland-Pfalz, Saarland, Sachsen, Sachsen-Anhalt, Schleswig-Holstein, Thüringen",
 		},
 	}
 }
@@ -104,8 +110,8 @@ func StartOfDST(year int) Holiday {
 	for {
 		if date.Weekday() == time.Sunday {
 			return Holiday{
-				Name: map[string]string{
-					"de-DE": "Beginn der Sommerzeit",
+				Name: TranslatedString{
+					language.German: "Beginn der Sommerzeit",
 				},
 				Date: date,
 			}
@@ -116,50 +122,50 @@ func StartOfDST(year int) Holiday {
 
 func PalmSunday(year int) Holiday {
 	return Holiday{
-		Name: map[string]string{
-			"de-DE": "Palmsonntag",
-			"en-US": "Palm Sunday",
+		Name: TranslatedString{
+			language.German:  "Palmsonntag",
+			language.English: "Palm Sunday",
 		},
 		Date: easterDate(year).AddDate(0, 0, -7),
-		Description: map[string]string{
-			"de-DE": "Gedenktag",
+		Description: TranslatedString{
+			language.German: "Gedenktag",
 		},
 	}
 }
 
 func MaundyThursday(year int) Holiday {
 	return Holiday{
-		Name: map[string]string{
-			"de-DE": "Gründonnerstag",
+		Name: TranslatedString{
+			language.German: "Gründonnerstag",
 		},
 		Date: easterDate(year).AddDate(0, 0, -3),
-		Description: map[string]string{
-			"de-DE": "Gedenktag in Baden-Württemberg, Bayern, Berlin, Brandenburg, Bremen, Hamburg, Hessen, Mecklenburg-Vorpommern, Niedersachsen, Nordrhein-Westfalen, Rheinland-Pfalz, Saarland, Sachsen, Sachsen-Anhalt, Schleswig-Holstein, Thüringen",
+		Description: TranslatedString{
+			language.German: "Gedenktag in Baden-Württemberg, Bayern, Berlin, Brandenburg, Bremen, Hamburg, Hessen, Mecklenburg-Vorpommern, Niedersachsen, Nordrhein-Westfalen, Rheinland-Pfalz, Saarland, Sachsen, Sachsen-Anhalt, Schleswig-Holstein, Thüringen",
 		},
 	}
 }
 
 func GoodFriday(year int) Holiday {
 	return Holiday{
-		Name: map[string]string{
-			"de-DE": "Karfreitag",
+		Name: TranslatedString{
+			language.German: "Karfreitag",
 		},
 		Date: easterDate(year).AddDate(0, 0, -2),
-		Description: map[string]string{
-			"de-DE": "Gesetzlicher Feiertag",
+		Description: TranslatedString{
+			language.German: "Gesetzlicher Feiertag",
 		},
 	}
 }
 
 func HolySaturday(year int) Holiday {
 	return Holiday{
-		Name: map[string]string{
-			"de-DE": "Karsamstag",
-			"en-US": "Holy Saturday",
+		Name: TranslatedString{
+			language.German:  "Karsamstag",
+			language.English: "Holy Saturday",
 		},
 		Date: easterDate(year).AddDate(0, 0, -1),
-		Description: map[string]string{
-			"de-DE": "Gedenktag in Bayern, Hessen, Niedersachsen, Saarland, Rheinland-Pfalz",
+		Description: TranslatedString{
+			language.German: "Gedenktag in Bayern, Hessen, Niedersachsen, Saarland, Rheinland-Pfalz",
 		},
 	}
 }
@@ -169,50 +175,50 @@ func Easter(year int) Holiday {
 	date := reference.AddDate(0, 0, easterOffset(year))
 
 	return Holiday{
-		Name: map[string]string{
-			"de-DE": "Ostern",
-			"en-US": "Easter",
+		Name: TranslatedString{
+			language.German:  "Ostern",
+			language.English: "Easter",
 		},
 		Date: date,
-		Description: map[string]string{
-			"de-DE": "Gedenktag in Baden-Württemberg, Bayern, Berlin, Brandenburg, Bremen, Hamburg, Hessen, Mecklenburg-Vorpommern, Niedersachsen, Nordrhein-Westfalen, Rheinland-Pfalz, Saarland, Sachsen, Sachsen-Anhalt, Schleswig-Holstein, Thüringen",
+		Description: TranslatedString{
+			language.German: "Gedenktag in Baden-Württemberg, Bayern, Berlin, Brandenburg, Bremen, Hamburg, Hessen, Mecklenburg-Vorpommern, Niedersachsen, Nordrhein-Westfalen, Rheinland-Pfalz, Saarland, Sachsen, Sachsen-Anhalt, Schleswig-Holstein, Thüringen",
 		},
 	}
 }
 
 func EasterMonday(year int) Holiday {
 	return Holiday{
-		Name: map[string]string{
-			"de-DE": "Ostermontag",
+		Name: TranslatedString{
+			language.German: "Ostermontag",
 		},
 		Date: easterDate(year).AddDate(0, 0, 1),
-		Description: map[string]string{
-			"de-DE": "Gesetzlicher Feiertag",
+		Description: TranslatedString{
+			language.German: "Gesetzlicher Feiertag",
 		},
 	}
 }
 
 func WorkersDay(year int) Holiday {
 	return Holiday{
-		Name: map[string]string{
-			"de-DE": "Tag der Arbeit",
+		Name: TranslatedString{
+			language.German: "Tag der Arbeit",
 		},
 		Date: time.Date(year, 5, 1, 0, 0, 0, 0, time.UTC),
-		Description: map[string]string{
-			"de-DE": "Gesetzlicher Feiertag",
+		Description: TranslatedString{
+			language.German: "Gesetzlicher Feiertag",
 		},
 	}
 }
 
 func VictoryInEuropeDay(year int) Holiday {
 	return Holiday{
-		Name: map[string]string{
-			"de-DE": "Jahrestag der Befreiung vom Nationalsozialismus",
-			"en-US": "Victory in Europe Day",
+		Name: TranslatedString{
+			language.German:  "Jahrestag der Befreiung vom Nationalsozialismus",
+			language.English: "Victory in Europe Day",
 		},
 		Date: time.Date(year, 5, 8, 0, 0, 0, 0, time.UTC),
-		Description: map[string]string{
-			"de-DE": "Gedenktag in Berlin, Brandenburg, Bremen, Mecklenburg-Vorpommern, Thüringen",
+		Description: TranslatedString{
+			language.German: "Gedenktag in Berlin, Brandenburg, Bremen, Mecklenburg-Vorpommern, Thüringen",
 		},
 	}
 }
@@ -228,13 +234,13 @@ func MothersDay(year int) Holiday {
 		}
 		if count == 2 {
 			return Holiday{
-				Name: map[string]string{
-					"de-DE": "Muttertag",
-					"en-US": "Mother's Day",
+				Name: TranslatedString{
+					language.German:  "Muttertag",
+					language.English: "Mother's Day",
 				},
 				Date: date,
-				Description: map[string]string{
-					"de-DE": "Gedenktag",
+				Description: TranslatedString{
+					language.German: "Gedenktag",
 				},
 			}
 		}
@@ -244,21 +250,21 @@ func MothersDay(year int) Holiday {
 
 func FeastOfTheAscension(year int) Holiday {
 	return Holiday{
-		Name: map[string]string{
-			"de-DE": "Christi Himmelfahrt",
+		Name: TranslatedString{
+			language.German: "Christi Himmelfahrt",
 		},
 		Date: easterDate(year).AddDate(0, 0, 39),
-		Description: map[string]string{
-			"de-DE": "Gesetzlicher Feiertag",
+		Description: TranslatedString{
+			language.German: "Gesetzlicher Feiertag",
 		},
 	}
 }
 
 func FathersDay(year int) Holiday {
 	return Holiday{
-		Name: map[string]string{
-			"de-DE": "Vatertag",
-			"en-EN": "Father's Day",
+		Name: TranslatedString{
+			language.German:  "Vatertag",
+			language.English: "Father's Day",
 		},
 		Date: easterDate(year).AddDate(0, 0, 39),
 	}
@@ -266,84 +272,84 @@ func FathersDay(year int) Holiday {
 
 func Pentecost(year int) Holiday {
 	return Holiday{
-		Name: map[string]string{
-			"de-DE": "Pfingsten",
+		Name: TranslatedString{
+			language.German: "Pfingsten",
 		},
 		Date: easterDate(year).AddDate(0, 0, 49),
-		Description: map[string]string{
-			"de-DE": "Gedenktag in Baden-Württemberg, Bayern, Berlin, Brandenburg, Bremen, Hamburg, Hessen, Mecklenburg-Vorpommern, Niedersachsen, Nordrhein-Westfalen, Rheinland-Pfalz, Saarland, Sachsen, Sachsen-Anhalt, Schleswig-Holstein, Thüringen",
+		Description: TranslatedString{
+			language.German: "Gedenktag in Baden-Württemberg, Bayern, Berlin, Brandenburg, Bremen, Hamburg, Hessen, Mecklenburg-Vorpommern, Niedersachsen, Nordrhein-Westfalen, Rheinland-Pfalz, Saarland, Sachsen, Sachsen-Anhalt, Schleswig-Holstein, Thüringen",
 		},
 	}
 }
 
 func PentecostMonday(year int) Holiday {
 	return Holiday{
-		Name: map[string]string{
-			"de-DE": "Pfingstmontag",
+		Name: TranslatedString{
+			language.German: "Pfingstmontag",
 		},
 		Date: easterDate(year).AddDate(0, 0, 50),
-		Description: map[string]string{
-			"de-DE": "Gesetzlicher Feiertag",
+		Description: TranslatedString{
+			language.German: "Gesetzlicher Feiertag",
 		},
 	}
 }
 
 func FeastOfCorpusChristi(year int) Holiday {
 	return Holiday{
-		Name: map[string]string{
-			"de-DE": "Fronleichnam",
+		Name: TranslatedString{
+			language.German: "Fronleichnam",
 		},
 		Date: easterDate(year).AddDate(0, 0, 60),
-		Description: map[string]string{
-			"de-DE": "Feiertag in Baden-Württemberg, Bayern, Hessen, Nordrhein-Westfalen, Rheinland-Pfalz, Saarland, Sachsen, Thüringen",
+		Description: TranslatedString{
+			language.German: "Feiertag in Baden-Württemberg, Bayern, Hessen, Nordrhein-Westfalen, Rheinland-Pfalz, Saarland, Sachsen, Thüringen",
 		},
 	}
 }
 
 func AugsburgerHohesFriedensfest(year int) Holiday {
 	return Holiday{
-		Name: map[string]string{
-			"de-DE": "Augsburger Hohes Friedensfest",
+		Name: TranslatedString{
+			language.German: "Augsburger Hohes Friedensfest",
 		},
 		Date: time.Date(year, 8, 8, 0, 0, 0, 0, time.UTC),
-		Description: map[string]string{
-			"de-DE": "Feiertag in Bayern",
+		Description: TranslatedString{
+			language.German: "Feiertag in Bayern",
 		},
 	}
 }
 
 func AssumptionOfMary(year int) Holiday {
 	return Holiday{
-		Name: map[string]string{
-			"de-DE": "Mariä Himmelfahrt",
+		Name: TranslatedString{
+			language.German: "Mariä Himmelfahrt",
 		},
 		Date: time.Date(year, 8, 15, 0, 0, 0, 0, time.UTC),
-		Description: map[string]string{
-			"de-DE": "Gedenktag in Bayern, Saarland, Sachsen, Thüringen",
+		Description: TranslatedString{
+			language.German: "Gedenktag in Bayern, Saarland, Sachsen, Thüringen",
 		},
 	}
 }
 
 func ChildrensDay(year int) Holiday {
 	return Holiday{
-		Name: map[string]string{
-			"de-DE": "Weltkindertag",
+		Name: TranslatedString{
+			language.German: "Weltkindertag",
 		},
 		Date: time.Date(year, 9, 20, 0, 0, 0, 0, time.UTC),
-		Description: map[string]string{
-			"de-DE": "Feiertag in Thüringen",
+		Description: TranslatedString{
+			language.German: "Feiertag in Thüringen",
 		},
 	}
 }
 
 func GermanUnityDay(year int) Holiday {
 	return Holiday{
-		Name: map[string]string{
-			"de-DE": "Tag der Deutschen Einheit",
+		Name: TranslatedString{
+			language.German: "Tag der Deutschen Einheit",
 		},
 		Date: time.Date(year, 10, 3, 0, 0, 0, 0, time.UTC),
-		Description: map[string]string{
-			"de-DE": "Gesetzlicher Feiertag",
+		Description: TranslatedString{
+			language.German: "Gesetzlicher Feiertag",
 		},
 	}
 }
@@ -354,8 +360,8 @@ func EndOfDST(year int) Holiday {
 	for {
 		if date.Weekday() == time.Sunday {
 			return Holiday{
-				Name: map[string]string{
-					"de-DE": "Ende der Sommerzeit",
+				Name: TranslatedString{
+					language.German: "Ende der Sommerzeit",
 				},
 				Date: date,
 			}
@@ -366,21 +372,21 @@ func EndOfDST(year int) Holiday {
 
 func ReformationDay(year int) Holiday {
 	return Holiday{
-		Name: map[string]string{
-			"de-DE": "Reformationstag",
+		Name: TranslatedString{
+			language.German: "Reformationstag",
 		},
 		Date: time.Date(year, 10, 31, 0, 0, 0, 0, time.UTC),
-		Description: map[string]string{
-			"de-DE": "Feiertag in Brandenburg, Mecklenburg-Vorpommern, Sachsen, Sachsen-Anhalt, Thüringen, Schleswig-Holstein, Hamburg, Niedersachsen, Bremen",
+		Description: TranslatedString{
+			language.German: "Feiertag in Brandenburg, Mecklenburg-Vorpommern, Sachsen, Sachsen-Anhalt, Thüringen, Schleswig-Holstein, Hamburg, Niedersachsen, Bremen",
 		},
 	}
 }
 
 func Halloween(year int) Holiday {
 	return Holiday{
-		Name: map[string]string{
-			"de-DE":  "Halloween",
-			"en-USE": "Halloween",
+		Name: TranslatedString{
+			language.German:  "Halloween",
+			language.English: "Halloween",
 		},
 		Date: time.Date(year, 10, 31, 0, 0, 0, 0, time.UTC),
 	}
@@ -388,25 +394,25 @@ func Halloween(year int) Holiday {
 
 func AllSaintsDay(year int) Holiday {
 	return Holiday{
-		Name: map[string]string{
-			"de-DE": "Allerheiligen",
+		Name: TranslatedString{
+			language.German: "Allerheiligen",
 		},
 		Date: time.Date(year, 11, 1, 0, 0, 0, 0, time.UTC),
-		Description: map[string]string{
-			"de-DE": "Feiertag in Baden-Württemberg, Bayern, Nordrhein-Westfalen, Rheinland-Pfalz, Saarland",
+		Description: TranslatedString{
+			language.German: "Feiertag in Baden-Württemberg, Bayern, Nordrhein-Westfalen, Rheinland-Pfalz, Saarland",
 		},
 	}
 }
 
 func StMartinsDay(year int) Holiday {
 	return Holiday{
-		Name: map[string]string{
-			"de-DE":  "St. Martin",
-			"en-USE": "St. Martin's Day",
+		Name: TranslatedString{
+			language.German:  "St. Martin",
+			language.English: "St. Martin's Day",
 		},
 		Date: time.Date(year, 11, 11, 0, 0, 0, 0, time.UTC),
-		Description: map[string]string{
-			"de-DE": "Gedenktag",
+		Description: TranslatedString{
+			language.German: "Gedenktag",
 		},
 	}
 }
@@ -417,12 +423,12 @@ func BußUndBettag(year int) Holiday {
 	for {
 		if date.Weekday() == time.Wednesday {
 			return Holiday{
-				Name: map[string]string{
-					"de-DE": "Buß- und Bettag",
+				Name: TranslatedString{
+					language.German: "Buß- und Bettag",
 				},
 				Date: date,
-				Description: map[string]string{
-					"de-DE": "Feiertag in Sachsen",
+				Description: TranslatedString{
+					language.German: "Feiertag in Sachsen",
 				},
 			}
 		}
@@ -432,47 +438,47 @@ func BußUndBettag(year int) Holiday {
 
 func Volkstrauertag(year int) Holiday {
 	return Holiday{
-		Name: map[string]string{
-			"de-DE": "Volkstrauertag",
-			"en-US": "Volkstrauertag",
+		Name: TranslatedString{
+			language.German:  "Volkstrauertag",
+			language.English: "Volkstrauertag",
 		},
 		Date: Totensonntag(year).Date.AddDate(0, 0, -7),
-		Description: map[string]string{
-			"de-DE": "Gedenktag",
+		Description: TranslatedString{
+			language.German: "Gedenktag",
 		},
 	}
 }
 
 func Totensonntag(year int) Holiday {
 	return Holiday{
-		Name: map[string]string{
-			"de-DE": "Totensonntag",
-			"en-US": "Totensonntag",
+		Name: TranslatedString{
+			language.German:  "Totensonntag",
+			language.English: "Totensonntag",
 		},
 		Date: FirstAdvent(year).Date.AddDate(0, 0, -7),
-		Description: map[string]string{
-			"de-DE": "Gedenktag",
+		Description: TranslatedString{
+			language.German: "Gedenktag",
 		},
 	}
 }
 
 func SaintNicholasDay(year int) Holiday {
 	return Holiday{
-		Name: map[string]string{
-			"de-DE": "Nikolaustag",
-			"en-US": "Saint Nicholas Day",
+		Name: TranslatedString{
+			language.German:  "Nikolaustag",
+			language.English: "Saint Nicholas Day",
 		},
 		Date: time.Date(year, 12, 6, 0, 0, 0, 0, time.UTC),
-		Description: map[string]string{
-			"de-DE": "Gedenktag",
+		Description: TranslatedString{
+			language.German: "Gedenktag",
 		},
 	}
 }
 
 func FirstAdvent(year int) Holiday {
 	return Holiday{
-		Name: map[string]string{
-			"de-DE": "1. Advent",
+		Name: TranslatedString{
+			language.German: "1. Advent",
 		},
 		Date: SecondAdvent(year).Date.AddDate(0, 0, -7),
 	}
@@ -480,8 +486,8 @@ func FirstAdvent(year int) Holiday {
 
 func SecondAdvent(year int) Holiday {
 	return Holiday{
-		Name: map[string]string{
-			"de-DE": "2. Advent",
+		Name: TranslatedString{
+			language.German: "2. Advent",
 		},
 		Date: ThirdAdvent(year).Date.AddDate(0, 0, -7),
 	}
@@ -489,8 +495,8 @@ func SecondAdvent(year int) Holiday {
 
 func ThirdAdvent(year int) Holiday {
 	return Holiday{
-		Name: map[string]string{
-			"de-DE": "3. Advent",
+		Name: TranslatedString{
+			language.German: "3. Advent",
 		},
 		Date: FourthAdvent(year).Date.AddDate(0, 0, -7),
 	}
@@ -502,8 +508,8 @@ func FourthAdvent(year int) Holiday {
 	for {
 		if date.Weekday() == time.Sunday {
 			return Holiday{
-				Name: map[string]string{
-					"de-DE": "4. Advent",
+				Name: TranslatedString{
+					language.German: "4. Advent",
 				},
 				Date: date,
 			}
@@ -514,8 +520,8 @@ func FourthAdvent(year int) Holiday {
 
 func ChristmasEve(year int) Holiday {
 	return Holiday{
-		Name: map[string]string{
-			"de-DE": "Heiligabend",
+		Name: TranslatedString{
+			language.German: "Heiligabend",
 		},
 		Date: time.Date(year, 12, 24, 0, 0, 0, 0, time.UTC),
 	}
@@ -523,32 +529,32 @@ func ChristmasEve(year int) Holiday {
 
 func FirstChristmasDay(year int) Holiday {
 	return Holiday{
-		Name: map[string]string{
-			"de-DE": "1. Weihnachtsfeiertag",
+		Name: TranslatedString{
+			language.German: "1. Weihnachtsfeiertag",
 		},
 		Date: time.Date(year, 12, 25, 0, 0, 0, 0, time.UTC),
-		Description: map[string]string{
-			"de-DE": "Gesetzlicher Feiertag",
+		Description: TranslatedString{
+			language.German: "Gesetzlicher Feiertag",
 		},
 	}
 }
 
 func SecondChristmasDay(year int) Holiday {
 	return Holiday{
-		Name: map[string]string{
-			"de-DE": "2. Weihnachtsfeiertag",
+		Name: TranslatedString{
+			language.German: "2. Weihnachtsfeiertag",
 		},
 		Date: time.Date(year, 12, 26, 0, 0, 0, 0, time.UTC),
-		Description: map[string]string{
-			"de-DE": "Gesetzlicher Feiertag",
+		Description: TranslatedString{
+			language.German: "Gesetzlicher Feiertag",
 		},
 	}
 }
 
 func Silvester(year int) Holiday {
 	return Holiday{
-		Name: map[string]string{
-			"de-DE": "Silvester",
+		Name: TranslatedString{
+			language.German: "Silvester",
 		},
 		Date: time.Date(year, 12, 31, 0, 0, 0, 0, time.UTC),
 	}
