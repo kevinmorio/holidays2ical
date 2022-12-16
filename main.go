@@ -21,7 +21,7 @@ func easterOffset(year int) int {
 	s := 2 - (3*k)/4
 	a := x % 19
 	d := (19*a + m) % 30
-	r := (d + 1/11) / 29
+	r := (d + a/11) / 29
 	og := 21 + d - r
 	sz := 7 - (x+x/4+s)%7
 	oe := 7 - (og-sz)%7
