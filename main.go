@@ -13,12 +13,12 @@ import (
 	"golang.org/x/text/language"
 )
 
-var calendarName = map[language.Tag]string{
+var calendarName = holidays.TranslatedString{
 	language.German:  "Feiertage",
 	language.English: "Holidays",
 }
 
-func holidayToEvent(h *holidays.Holiday, lang language.Tag) *ics.VEvent {
+func holidayToEvent(h *holidays.Holiday, lang language.Tag) (*ics.VEvent, error) {
 	event := ics.NewEvent(strings.ToUpper(uuid.NewString()))
 	// event.SetAllDayStartAt(h.Date)
 	// event.SetAllDayEndAt(h.Date.AddDate(0, 0, 1))
@@ -31,11 +31,20 @@ func holidayToEvent(h *holidays.Holiday, lang language.Tag) *ics.VEvent {
 
 	event.SetTimeTransparency(ics.TransparencyTransparent)
 
-	event.SetSummary(h.Name[lang])
-	event.SetDtStampTime(time.Now())
-	event.SetDescription(h.Description[lang])
+	// Consider event name as required
+	hName, ok := h.Name[lang]
+	if !ok {
+		return nil, fmt.Errorf("Name not available for language '%s`", lang)
+	}
 
-	return event
+	// Description is optional
+	hDescription := h.Description[lang]
+
+	event.SetSummary(hName)
+	event.SetDtStampTime(time.Now())
+	event.SetDescription(hDescription)
+
+	return event, nil
 }
 
 func main() {
@@ -51,15 +60,16 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Invalid language tag '%s'\n", *lang)
 	}
 
-	// defaultOutfilePath := fmt.Sprintf("%s.ics", calendarName[langTag])
-
 	cal := ics.NewCalendarFor("-//Kevin Morio//holidays2ics")
 	cal.SetCalscale("GREGORIAN")
 	cal.SetXWRCalName(calendarName[langTag])
 
 	for year := *fromYear; year <= *tillYear; year++ {
 		for _, holiday := range holidays.HolidaysForYear(year) {
-			cal.AddVEvent(holidayToEvent(&holiday, langTag))
+			event, err := holidayToEvent(&holiday, langTag)
+			if err == nil {
+				cal.AddVEvent(event)
+			}
 		}
 	}
 
