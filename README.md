@@ -1,7 +1,8 @@
 <p align="center">
     <img src="assets/logo_black.svg#gh-light-mode-only" alt="holidays2ical">
     <img src="assets/logo_white.svg#gh-dark-mode-only" alt="holidays2ical"><br>
-    <img src="https://img.shields.io/github/license/kevinmorio/holidays2ical" alt="license"></br>
+    <img src="https://img.shields.io/github/license/kevinmorio/holidays2ical" alt="license">
+    <img src="https://github.com/kevinmorio/holidays2ical/actions/workflows/go.yml/badge.svg" alt="Build status"></br>
     A command-line tool to generate iCal calendars for public holidays and special days.
 </p>
 
