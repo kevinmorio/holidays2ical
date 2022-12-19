@@ -18,16 +18,13 @@ var calendarName = holidays.TranslatedString{
 	language.English: "Holidays",
 }
 
+const icalDateFormat = "20060102"
+
 func holidayToEvent(h *holidays.Holiday, lang language.Tag) (*ics.VEvent, error) {
 	event := ics.NewEvent(strings.ToUpper(uuid.NewString()))
-	// event.SetAllDayStartAt(h.Date)
-	// event.SetAllDayEndAt(h.Date.AddDate(0, 0, 1))
 
-	event.SetProperty(ics.ComponentPropertyDtStart, h.Date.UTC().Format("20060102"), ics.WithValue(string(ics.ValueDataTypeDate)))
-	event.SetProperty(ics.ComponentPropertyDtEnd, h.Date.AddDate(0, 0, 1).UTC().Format("20060102"), ics.WithValue(string(ics.ValueDataTypeDate)))
-
-	// event.SetProperty(ics.ComponentPropertyDtStart, h.Date.UTC().Format("20060102"))
-	// event.SetProperty(ics.ComponentPropertyDtEnd, h.Date.AddDate(0, 0, 1).UTC().Format("20060102"))
+	event.SetProperty(ics.ComponentPropertyDtStart, h.Date.UTC().Format(icalDateFormat), ics.WithValue(string(ics.ValueDataTypeDate)))
+	event.SetProperty(ics.ComponentPropertyDtEnd, h.Date.AddDate(0, 0, 1).UTC().Format(icalDateFormat), ics.WithValue(string(ics.ValueDataTypeDate)))
 
 	event.SetTimeTransparency(ics.TransparencyTransparent)
 
