@@ -8,6 +8,7 @@ import (
 	"time"
 
 	ics "github.com/arran4/golang-ical"
+	"github.com/fatih/color"
 	"github.com/google/uuid"
 	"github.com/kevinmorio/holidays2ical/holidays"
 	"golang.org/x/text/language"
@@ -88,9 +89,12 @@ func main() {
 		}
 		fmt.Printf("Saved calendar to %s\n", *outfilePath)
 	case StdoutFormat:
+		greyBold := color.New(color.FgBlack).Add(color.Bold).SprintFunc()
+		whiteBold := color.New(color.FgWhite).Add(color.Bold).SprintfFunc()
+
 		for year := *fromYear; year <= *tillYear; year++ {
 			for _, holiday := range holidays.HolidaysForYear(year) {
-				fmt.Printf("%s    %s\n", holiday.Date.Format("Mon Jan _2 2006"), holiday.Name[langTag])
+				fmt.Printf("%s    %s\n", greyBold(holiday.Date.Format("Mon Jan _2 2006")), whiteBold(holiday.Name[langTag]))
 			}
 		}
 	}
