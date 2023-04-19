@@ -18,7 +18,11 @@ var calendarName = holidays.TranslatedString{
 	language.English: "Holidays",
 }
 
-const icalDateFormat = "20060102"
+const (
+	icalDateFormat string = "20060102"
+	ICSFormat      string = "ics"
+	StdoutFormat   string = "stdout"
+)
 
 func holidayToEvent(h *holidays.Holiday, lang language.Tag) (*ics.VEvent, error) {
 	event := ics.NewEvent(strings.ToUpper(uuid.NewString()))
@@ -48,6 +52,7 @@ func main() {
 	fromYear := flag.Int("from", time.Now().Year(), "year to start from")
 	tillYear := flag.Int("till", time.Now().Year(), "year to end")
 	lang := flag.String("lang", "de", "the language used for the holidays")
+	format := flag.String("format", "stdout", "the output format for the holidays (ics|stdout)")
 	outfilePath := flag.String("outfile", "Holidays.ics", "the outfile of the calendar")
 
 	flag.Parse()
@@ -57,27 +62,36 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Invalid language tag '%s'\n", *lang)
 	}
 
-	cal := ics.NewCalendarFor("-//Kevin Morio//holidays2ics")
-	cal.SetCalscale("GREGORIAN")
-	cal.SetXWRCalName(calendarName[langTag])
+	switch *format {
+	case ICSFormat:
+		cal := ics.NewCalendarFor("-//Kevin Morio//holidays2ics")
+		cal.SetCalscale("GREGORIAN")
+		cal.SetXWRCalName(calendarName[langTag])
 
-	for year := *fromYear; year <= *tillYear; year++ {
-		for _, holiday := range holidays.HolidaysForYear(year) {
-			event, err := holidayToEvent(&holiday, langTag)
-			if err == nil {
-				cal.AddVEvent(event)
+		for year := *fromYear; year <= *tillYear; year++ {
+			for _, holiday := range holidays.HolidaysForYear(year) {
+				event, err := holidayToEvent(&holiday, langTag)
+				if err == nil {
+					cal.AddVEvent(event)
+				}
+			}
+		}
+
+		outfile, err := os.Create(*outfilePath)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "%s\n", err)
+		}
+		defer outfile.Close()
+
+		if err := cal.SerializeTo(outfile); err != nil {
+			fmt.Fprintf(os.Stderr, "%s\n", err)
+		}
+		fmt.Printf("Saved calendar to %s\n", *outfilePath)
+	case StdoutFormat:
+		for year := *fromYear; year <= *tillYear; year++ {
+			for _, holiday := range holidays.HolidaysForYear(year) {
+				fmt.Printf("%s    %s\n", holiday.Date.Format("Mon Jan _2 2006"), holiday.Name[langTag])
 			}
 		}
 	}
-
-	outfile, err := os.Create(*outfilePath)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s\n", err)
-	}
-	defer outfile.Close()
-
-	if err := cal.SerializeTo(outfile); err != nil {
-		fmt.Fprintf(os.Stderr, "%s\n", err)
-	}
-	fmt.Printf("Saved calendar to %s\n", *outfilePath)
 }
