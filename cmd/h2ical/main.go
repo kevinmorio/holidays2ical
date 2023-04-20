@@ -97,5 +97,8 @@ func main() {
 				fmt.Printf("%s    %s\n", greyBold(holiday.Date.Format("Mon Jan _2 2006")), whiteBold(holiday.Name[langTag]))
 			}
 		}
+	default:
+		fmt.Printf("invalid format: %s\n", *format)
+		os.Exit(1)
 	}
 }
