@@ -72,9 +72,11 @@ func main() {
 		for year := *fromYear; year <= *tillYear; year++ {
 			for _, holiday := range holidays.HolidaysForYear(year) {
 				event, err := holidayToEvent(&holiday, langTag)
-				if err == nil {
-					cal.AddVEvent(event)
+				if err != nil {
+					fmt.Printf("couldn't create event: %s", err.Error())
+					continue
 				}
+				cal.AddVEvent(event)
 			}
 		}
 
